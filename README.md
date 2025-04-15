@@ -1,11 +1,13 @@
-# Сервис для управления задачами и анализа нагрузки студентов
+# Информационный сайт ООО ВЗЛЁТ СЕРВИС
+Frontend:  
+* Next.js
+* Tailwind 
+* daisyUI
+* zustand 
 
-# Фронтенд
-
-Стек Next.js, Tailwind
-
-Для запросов к базе используется axios & tanstack
-OAuth2 (Через Yandex, Google, GitHub)
+Работа с API:
+* axios
+* tanstak
 
 Инструкция по запуску
-TODO
+
