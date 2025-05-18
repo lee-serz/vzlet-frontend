@@ -1,17 +1,16 @@
-import MainLayout from '@/components/main-layout/MainLayout'
-import About from '@/components/welcome/About'
-import Advantages from '@/components/welcome/Advantages'
-import { Contacts } from '@/components/welcome/Contacts'
-import Stoks from '@/components/welcome/Stoks'
+import Footer from '@/components/footer/Footer'
+import News from '@/components/news/News'
+import Services from '@/components/services/Services'
+import Welcome from '@/components/welcome/Welcome'
 
 async function HomePage() {
 	return (
-		<MainLayout>
-			<About />
-			<Advantages />
-			<Stoks />
-			<Contacts />
-		</MainLayout>
+		<>
+			<Welcome />
+			<Services />
+			<News />
+			<Footer />
+		</>
 	)
 }
 

@@ -1,70 +1,49 @@
-'use client'
+import Image from 'next/image'
 
-import { useLogout } from '@/hooks/useLogout'
-import { ChevronLeft } from 'lucide-react'
-import Link from 'next/link'
-import { useDropdown } from '@/hooks/useDropdown'
-
-export function Header() {
-	const { logout, isLoading } = useLogout()
-	const { dropdownRef, chevronRef, closeDropdown } = useDropdown()
-
-	const handleAction = (action?: () => void) => {
-		action?.()
-		closeDropdown()
-	}
-
+export default function Header() {
 	return (
-		<div className="navbar bg-base-100 shadow-sm px-4 mb-4">
-			<div className="flex-1">
-				<Link href={'/lk'} className="text-xl font-bold">
-					TimeForGood
-				</Link>
+		<header className="flex justify-between items-center pb-6 px-6 border-b border-gray-200">
+			<div className="  bg-white/80 pb-2 pt-1 px-4 rounded">
+				<Image
+					src={'/assets/icons/vzlet.svg'}
+					width={128}
+					height={32}
+					alt="Логотип"
+				/>
 			</div>
-			<Link href={'login'}>Войти</Link>
-			{/* <details ref={dropdownRef} className="dropdown dropdown-end">
-				<summary className="flex items-center gap-1 cursor-pointer list-none">
-					<div className="btn btn-ghost btn-circle avatar">
-						<div className="w-10 rounded-full">
-							<img
-								alt="User avatar"
-								src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-							/>
-						</div>
+			<div className="text-lg font-semibold uppercase">
+				<div className="flex gap-8">
+					<div className="">
+						<a href="" className="flex gap-2">
+							О компании{' '}
+						</a>{' '}
 					</div>
-					<ChevronLeft
-						ref={chevronRef}
-						size={20}
-						style={{ transition: 'transform 0.2s ease' }}
-					/>
-				</summary>
-
-				<ul className="menu menu-sm dropdown-content mt-3 z-[1] -right-4 top-14 p-2 shadow bg-base-100 rounded-box w-52">
-					<li>
-						<Link
-							href="/lk/profile"
-							className="text-base"
-							onClick={() => handleAction()}
-						>
-							Профиль
-						</Link>
-					</li>
-					<li>
-						<a className="text-base" onClick={() => handleAction()}>
-							Настройки <span className="badge text-xs">скоро</span>
-						</a>
-					</li>
-					<li>
-						<button
-							className="text-base"
-							onClick={() => handleAction(logout)}
-							disabled={isLoading}
-						>
-							{isLoading ? 'Выход...' : 'Выход'}
-						</button>
-					</li>
-				</ul>
-			</details> */}
-		</div>
+					<div className="">
+						<a href="" className="flex gap-2">
+							Услуги{' '}
+						</a>{' '}
+					</div>
+					<div className="">
+						<a href="" className="flex gap-2">
+							Абонентам{' '}
+						</a>{' '}
+					</div>
+					<div className="">
+						<a href="" className="flex gap-2">
+							Новости{' '}
+						</a>{' '}
+					</div>
+					<div className="">
+						<a href="" className="flex gap-2">
+							Контакты{' '}
+						</a>{' '}
+					</div>
+				</div>
+			</div>
+			<div className="text-sm text-right">
+				<div className="">+7 800 551 12 45</div>
+				<div className="text-gray-500">vzlet-rostov@yandex.ru</div>
+			</div>
+		</header>
 	)
 }
