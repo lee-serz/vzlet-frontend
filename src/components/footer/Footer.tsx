@@ -15,7 +15,9 @@ export default function Footer() {
 								className="w-24 md:w-32"
 							/>
 						</div>
-						<p className="text-xs md:text-sm">ООО "Взлёт-сервис" © 2003-2024</p>
+						<p className="text-xs md:text-sm">
+							ООО &quot;Взлёт-сервис&quot; © 2003-2024
+						</p>
 					</div>
 
 					<div>
