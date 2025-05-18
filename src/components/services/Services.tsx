@@ -3,15 +3,15 @@ import Image from 'next/image'
 export default function Services() {
 	const services = [
 		{
-			title: 'Строительно-монтажные работы',
+			title: 'Установка узлов учёта тепловой энергии',
 			image: '/assets/images/services-1.jpg'
 		},
 		{
-			title: 'Проектирование объектов теплоэнергетики',
+			title: 'Установка узлов учёта сточных вод',
 			image: '/assets/images/services-2.jpg'
 		},
 		{
-			title: 'Техническое обслуживание объектов теплоэнергетики',
+			title: 'Установка узлов учета холодной воды',
 			image: '/assets/images/services-3.jpg'
 		}
 	]
