@@ -30,8 +30,6 @@ const features = [
 export default function Welcome() {
 	return (
 		<main className="px-4 md:px-8 lg:px-16 xl:px-64 py-8 bg-[url(/assets/images/bg-welcome.jpg)] bg-no-repeat bg-cover bg-center text-white">
-			<Header />
-
 			<div className="py-8 md:py-16 lg:py-24">
 				<h1 className="text-3xl md:text-5xl lg:text-5xl xl:text-6xl font-extrabold mb-2">
 					ООО «Взлёт-сервис»

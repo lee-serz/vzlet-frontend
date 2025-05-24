@@ -1,6 +1,8 @@
 import localFont from 'next/font/local'
 import { Providers } from './Providers'
 import './globals.css'
+import Header from '@/components/header/Header'
+import Footer from '@/components/footer/Footer'
 const ttNorms = localFont({
 	src: [
 		{
@@ -34,11 +36,11 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" className={`${ttNorms.variable}`}>
-			<body className={ttNorms.className}>
+			<body className={`${ttNorms.className} flex flex-col min-h-screen`}>
 				<Providers>
-					<main className="flex h-full flex-col justify-between">
-						{children}
-					</main>
+					<Header />
+					<main className="flex-grow">{children}</main>
+					<Footer />
 				</Providers>
 			</body>
 		</html>

@@ -9,7 +9,6 @@ async function HomePage() {
 			<Welcome />
 			<Services />
 			<News />
-			<Footer />
 		</>
 	)
 }
