@@ -47,7 +47,7 @@ const AboutPage = () => {
 			{/* Герой-секция */}
 			<section className="relative px-4 md:px-8 lg:px-48 py-16 md:py-48 bg-[url(/assets/images/bg-about.jpg)] bg-cover bg-center text-white">
 				<div className="absolute inset-0 bg-black/60"></div>
-				<div className="relative z-10 max-w-4xl">
+				<div className="relative z-1 max-w-4xl">
 					<h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
 						О компании
 					</h1>
