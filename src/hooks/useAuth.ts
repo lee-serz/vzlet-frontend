@@ -1,14 +1,16 @@
+// hooks/useAuth.ts
 'use client'
 
 import { useProfile } from './useProfile'
+import { getAccessToken } from '@/services/auth/auth.helper'
 
 export function useAuth() {
-	const { user, isLoading } = useProfile()
-	console.log(user)
+	const { user, isLoading, isProfileQuerySuccess } = useProfile()
+	const accessToken = getAccessToken()
 
 	return {
 		user,
 		isLoading,
-		isAuth: !!user
+		isAuth: !!accessToken && isProfileQuerySuccess && !!user
 	}
 }

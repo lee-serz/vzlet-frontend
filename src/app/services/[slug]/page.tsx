@@ -1,10 +1,11 @@
-// app/services/[slug]/page.tsx
-import Image from 'next/image'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+import ApplicationModal from '../ApplicationModal'
+import { axiosClassic } from '@/api/axios'
 
-// Тип данных для услуги
-type Service = {
+interface Service {
+	id: string
 	slug: string
 	title: string
 	description: string
@@ -12,207 +13,25 @@ type Service = {
 	fullDescription: string
 	features: string[]
 	price?: string
-	documents?: {
-		title: string
-		url: string
-	}[]
 }
 
-// Данные всех услуг (можно вынести в отдельный файл)
-const allServices: Service[] = [
-	{
-		slug: 'heat-metering',
-		title: 'Установка узлов учёта тепловой энергии',
-		description:
-			'Проектирование, монтаж и пусконаладка узлов учета тепловой энергии с использованием современных тепловычислителей',
-		image: '/assets/images/services-1.jpg',
-		fullDescription: `
-      <p>Мы предлагаем полный комплекс услуг по установке узлов учета тепловой энергии:</p>
-      <ul class="list-disc pl-5 space-y-2 my-4">
-        <li>Проектирование узлов учета согласно нормативным требованиям</li>
-        <li>Монтаж оборудования с соблюдением всех технических стандартов</li>
-        <li>Пусконаладочные работы и тестирование системы</li>
-        <li>Сдача в эксплуатацию с оформлением всей документации</li>
-      </ul>
-      <p>Используем собственные тепловычислители ТСРВ-044 с погрешностью не более 0.5%.</p>
-    `,
-		features: [
-			'Срок выполнения от 5 рабочих дней',
-			'Гарантия 3 года на оборудование',
-			'Сертифицированные специалисты с допусками СРО',
-			'Дистанционный мониторинг показаний',
-			'Техническая поддержка 24/7'
-		],
-		price: 'от 75 000 ₽',
-		documents: [
-			{ title: 'Типовой договор', url: '/docs/contract-heat.pdf' },
-			{ title: 'Технические требования', url: '/docs/tech-requirements.pdf' },
-			{ title: 'Сертификаты оборудования', url: '/docs/certificates.pdf' }
-		]
-	},
-	{
-		slug: 'wastewater-metering',
-		title: 'Установка узлов учёта сточных вод',
-		description:
-			'Комплексные решения по учету сточных вод для промышленных предприятий и ЖКХ',
-		image: '/assets/images/services-2.jpg',
-		fullDescription: `
-      <p>Профессиональный монтаж систем учета сточных вод:</p>
-      <ul class="list-disc pl-5 space-y-2 my-4">
-        <li>Расчет и проектирование с учетом специфики объекта</li>
-        <li>Установка расходомеров и датчиков уровня</li>
-        <li>Настройка программного обеспечения</li>
-        <li>Обучение персонала</li>
-      </ul>
-      <p>Применяем расходомеры с защитой от засорения для работы в агрессивных средах.</p>
-    `,
-		features: [
-			'Работаем с любыми типами стоков',
-			'Автоматическая передача данных',
-			'Калибровка на месте',
-			'Гарантия 2 года',
-			'Техническое сопровождение'
-		],
-		price: 'от 68 000 ₽',
-		documents: [
-			{ title: 'Пример проекта', url: '/docs/wastewater-project.pdf' },
-			{
-				title: 'Рекомендации по эксплуатации',
-				url: '/docs/wastewater-manual.pdf'
-			}
-		]
-	},
-	{
-		slug: 'water-metering',
-		title: 'Установка узлов учета холодной воды',
-		description:
-			'Монтаж и обслуживание водомерных узлов с дистанционным съемом показаний',
-		image: '/assets/images/services-3.jpg',
-		fullDescription: `
-      <p>Комплексные решения для учета холодного водоснабжения:</p>
-      <ul class="list-disc pl-5 space-y-2 my-4">
-        <li>Подбор оптимального типа счетчиков</li>
-        <li>Монтаж с минимальным вмешательством в существующие сети</li>
-        <li>Интеграция с системами автоматического считывания</li>
-        <li>Поверка и калибровка</li>
-      </ul>
-      <p>Используем ультразвуковые и тахометрические счетчики ведущих производителей.</p>
-    `,
-		features: [
-			'Монтаж за 1 день',
-			'Дистанционный сбор данных',
-			'Антимагнитная защита',
-			'Гарантия 5 лет',
-			'Бесплатный выезд на диагностику'
-		],
-		price: 'от 45 000 ₽',
-		documents: [
-			{ title: 'Каталог счетчиков', url: '/docs/water-meters-catalog.pdf' },
-			{ title: 'Схемы подключения', url: '/docs/water-schemes.pdf' }
-		]
-	},
-	{
-		slug: 'calibration',
-		title: 'Поверка и калибровка приборов',
-		description:
-			'Аттестованная лаборатория для поверки и калибровки приборов учета',
-		image: '/assets/images/services-4.jpg',
-		fullDescription: `
-      <p>Аккредитованная лаборатория выполняет:</p>
-      <ul class="list-disc pl-5 space-y-2 my-4">
-        <li>Поверку теплосчетчиков, водомеров, расходомеров</li>
-        <li>Калибровку датчиков давления и температуры</li>
-        <li>Ремонт и настройку оборудования</li>
-        <li>Оформление свидетельств о поверке</li>
-      </ul>
-      <p>Имеем аттестат аккредитации № RA.RU.312572 от 12.04.2022</p>
-    `,
-		features: [
-			'Собственная аккредитованная лаборатория',
-			'Срок поверки - 1-2 дня',
-			'Выездная поверка на объекте',
-			'Работаем со всеми типами приборов',
-			'Официальные документы'
-		],
-		price: 'от 3 500 ₽ за прибор',
-		documents: [
-			{ title: 'Аттестат аккредитации', url: '/docs/accreditation.pdf' },
-			{ title: 'Прейскурант на поверку', url: '/docs/calibration-price.pdf' }
-		]
-	},
-	{
-		slug: 'maintenance',
-		title: 'Техническое обслуживание',
-		description:
-			'Регулярное обслуживание и ремонт узлов учета для поддержания точности измерений',
-		image: '/assets/images/services-5.jpg',
-		fullDescription: `
-      <p>Комплексное обслуживание узлов учета включает:</p>
-      <ul class="list-disc pl-5 space-y-2 my-4">
-        <li>Плановые проверки оборудования</li>
-        <li>Диагностику и устранение неисправностей</li>
-        <li>Чистку и калибровку датчиков</li>
-        <li>Анализ корректности показаний</li>
-        <li>Замену расходных материалов</li>
-      </ul>
-      <p>Предлагаем гибкие условия абонентского обслуживания.</p>
-    `,
-		features: [
-			'Круглосуточная поддержка',
-			'Аварийный выезд в течение 2 часов',
-			'Собственный склад запчастей',
-			'Персональный инженер',
-			'Отчетность по установленной форме'
-		],
-		price: 'от 8 000 ₽/месяц',
-		documents: [
-			{
-				title: 'Договор на обслуживание',
-				url: '/docs/maintenance-contract.pdf'
-			},
-			{ title: 'Перечень работ', url: '/docs/maintenance-scope.pdf' }
-		]
-	},
-	{
-		slug: 'consulting',
-		title: 'Консультации и аудит',
-		description: 'Экспертные консультации и энергетический аудит систем учета',
-		image: '/assets/images/services-6.jpg',
-		fullDescription: `
-      <p>Профессиональные консультационные услуги:</p>
-      <ul class="list-disc pl-5 space-y-2 my-4">
-        <li>Энергетический аудит систем учета</li>
-        <li>Оптимизация схем коммерческого учета</li>
-        <li>Подготовка технических заданий</li>
-        <li>Экспертиза проектной документации</li>
-        <li>Сопровождение в спорах с ресурсоснабжающими организациями</li>
-      </ul>
-      <p>Наши специалисты имеют опыт работы в Госэнергонадзоре и знают все нюансы законодательства.</p>
-    `,
-		features: [
-			'Бесплатный первичный анализ',
-			'Эксперты с 15+ летним опытом',
-			'Полный пакет отчетных документов',
-			'Поддержка в судебных спорах',
-			'Конфиденциальность'
-		],
-		price: 'от 25 000 ₽',
-		documents: [
-			{ title: 'Пример отчета по аудиту', url: '/docs/audit-sample.pdf' },
-			{
-				title: 'Перечень консультационных услуг',
-				url: '/docs/consulting-list.pdf'
-			}
-		]
-	}
+const COMMON_DOCUMENTS = [
+	{ title: 'Типовой договор', url: '/docs/general-contract.pdf' },
+	{ title: 'Реквизиты компании', url: '/docs/company-details.pdf' },
+	{ title: 'Лицензии', url: '/docs/licenses.pdf' }
 ]
 
-export default function ServiceDetail({
-	params
-}: {
-	params: { slug: string }
-}) {
-	const service = allServices.find(s => s.slug === params.slug)
+async function getService(slug: string): Promise<Service | null> {
+	try {
+		const { data } = await axiosClassic.get<Service>(`/services/${slug}`)
+		return data
+	} catch (error) {
+		console.error('Error fetching service:', error)
+		return null
+	}
+}
+export default async function ServiceDetail({ params }: any) {
+	const service = await getService(params.slug)
 
 	if (!service) {
 		notFound()
@@ -265,37 +84,35 @@ export default function ServiceDetail({
 								</div>
 							)}
 
-							{service.documents && service.documents.length > 0 && (
-								<div className="bg-gray-50 p-4 rounded-lg">
-									<h3 className="text-lg font-bold mb-4">Документы</h3>
-									<ul className="space-y-2">
-										{service.documents.map((doc, index) => (
-											<li key={index}>
-												<Link
-													href={doc.url}
-													target="_blank"
-													className="flex items-center text-blue-600 hover:underline"
+							<div className="bg-gray-50 p-4 rounded-lg">
+								<h3 className="text-lg font-bold mb-4">Документы</h3>
+								<ul className="space-y-2">
+									{COMMON_DOCUMENTS.map((doc, index) => (
+										<li key={index}>
+											<Link
+												href={doc.url}
+												target="_blank"
+												className="flex items-center text-blue-600 hover:underline"
+											>
+												<svg
+													className="w-5 h-5 mr-2"
+													fill="none"
+													stroke="currentColor"
+													viewBox="0 0 24 24"
 												>
-													<svg
-														className="w-5 h-5 mr-2"
-														fill="none"
-														stroke="currentColor"
-														viewBox="0 0 24 24"
-													>
-														<path
-															strokeLinecap="round"
-															strokeLinejoin="round"
-															strokeWidth={2}
-															d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-														/>
-													</svg>
-													{doc.title}
-												</Link>
-											</li>
-										))}
-									</ul>
-								</div>
-							)}
+													<path
+														strokeLinecap="round"
+														strokeLinejoin="round"
+														strokeWidth={2}
+														d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+													/>
+												</svg>
+												{doc.title}
+											</Link>
+										</li>
+									))}
+								</ul>
+							</div>
 						</div>
 
 						{/* Правая колонка - описание услуги */}
@@ -339,12 +156,7 @@ export default function ServiceDetail({
 									Оставьте заявку и наши специалисты свяжутся с вами для
 									уточнения деталей
 								</p>
-								<Link
-									href="/contacts"
-									className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-								>
-									Оставить заявку
-								</Link>
+								<ApplicationModal serviceSlug={params.slug} />
 							</div>
 						</div>
 					</div>

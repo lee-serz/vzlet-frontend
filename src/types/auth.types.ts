@@ -26,6 +26,7 @@ export interface IUser {
 	avatarPath?: string
 	rights: UserRole[]
 	token: string
+	createdAt: any
 }
 
 export interface IFormData extends Pick<IUser, 'email'> {

@@ -1,59 +1,35 @@
+import { axiosClassic } from '@/api/axios'
 import Image from 'next/image'
 import Link from 'next/link'
 
-const ServicesPage = () => {
-	const services = [
-		{
-			title: 'Установка узлов учёта тепловой энергии',
-			description:
-				'Проектирование, монтаж и пусконаладка узлов учета тепловой энергии с использованием современных тепловычислителей',
-			image: '/assets/images/services-1.jpg',
-			href: '/services/heat-metering',
-			slug: 'heat-metering'
-		},
-		{
-			title: 'Установка узлов учёта сточных вод',
-			description:
-				'Комплексные решения по учету сточных вод для промышленных предприятий и ЖКХ',
-			image: '/assets/images/services-2.jpg',
-			href: '/services/wastewater-metering',
-			slug: 'wastewater-metering'
-		},
-		{
-			title: 'Установка узлов учета холодной воды',
-			description:
-				'Монтаж и обслуживание водомерных узлов с дистанционным съемом показаний',
-			image: '/assets/images/services-3.jpg',
-			href: '/services/water-metering',
-			slug: 'water-metering'
-		},
-		{
-			title: 'Поверка и калибровка приборов',
-			description:
-				'Аттестованная лаборатория для поверки и калибровки приборов учета',
-			image: '/assets/images/services-4.jpg',
-			href: '/services/calibration',
-			slug: 'calibration'
-		},
-		{
-			title: 'Техническое обслуживание',
-			description:
-				'Регулярное обслуживание и ремонт узлов учета для поддержания точности измерений',
-			image: '/assets/images/services-5.jpg',
-			href: '/services/maintenance',
-			slug: 'maintenance'
-		},
-		{
-			title: 'Консультации и аудит',
-			description:
-				'Экспертные консультации и энергетический аудит систем учета',
-			image: '/assets/images/services-6.jpg',
-			href: '/services/consulting',
-			slug: 'consulting'
-		}
-	]
+interface Service {
+	id: string
+	slug: string
+	title: string
+	description: string
+	image: string
+	price?: string
+}
 
-	const features = [
+interface Feature {
+	title: string
+	icon: string
+}
+
+async function getServices(): Promise<Service[]> {
+	try {
+		const { data } = await axiosClassic.get<Service[]>('/services')
+		return data
+	} catch (error) {
+		console.error('Error fetching services:', error)
+		throw new Error('Failed to fetch services')
+	}
+}
+
+const ServicesPage = async () => {
+	const services = await getServices()
+
+	const features: Feature[] = [
 		{
 			title: 'Собственное производство',
 			icon: '/assets/icons/icon-award.svg'
@@ -101,9 +77,9 @@ const ServicesPage = () => {
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-					{services.map((service, index) => (
+					{services.map(service => (
 						<div
-							key={index}
+							key={service.id}
 							className="group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
 						>
 							<div className="relative h-48 md:h-56 overflow-hidden">
@@ -119,6 +95,11 @@ const ServicesPage = () => {
 									{service.title}
 								</h3>
 								<p className="text-gray-600 mb-4">{service.description}</p>
+								{service.price && (
+									<p className="text-lg font-semibold text-blue-600 mb-4">
+										{service.price}
+									</p>
+								)}
 								<Link
 									href={`/services/${service.slug}`}
 									className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors"
@@ -155,7 +136,7 @@ const ServicesPage = () => {
 						{features.map((feature, index) => (
 							<div
 								key={index}
-								className="bg-white p-6 rounded-lg shadow-md text-center"
+								className="bg-white py-6 rounded-lg shadow-md text-center"
 							>
 								<div className="flex justify-center mb-4">
 									<Image

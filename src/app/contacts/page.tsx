@@ -9,7 +9,7 @@ const ContactsPage = () => {
 		email: 'rostov@vzlet-service.ru',
 		hours: 'Пн-Пт: 9:00 - 18:00',
 		coords: [47.222531, 39.718676],
-		image: '/assets/images/map-rostov.jpg'
+		image: '/assets/images/map.jpg'
 	}
 
 	const departments = [
@@ -195,7 +195,7 @@ const ContactsPage = () => {
 									fill
 									className="object-cover"
 								/>
-								<div className="absolute inset-0 bg-blue-900/20"></div>
+
 								<div className="absolute bottom-4 left-4 bg-white p-3 rounded-lg shadow-md">
 									<h4 className="font-bold">{office.city}</h4>
 									<p className="text-sm">{office.address}</p>

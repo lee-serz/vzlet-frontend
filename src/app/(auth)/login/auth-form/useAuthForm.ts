@@ -23,7 +23,7 @@ export function useAuthForm(isLogin: boolean) {
 		onSuccess() {
 			startTransition(() => {
 				reset()
-				router.replace('/lk')
+				router.replace('/')
 				toast.success('Вы успешно вошли!')
 			})
 		},
@@ -41,7 +41,7 @@ export function useAuthForm(isLogin: boolean) {
 		onSuccess() {
 			startTransition(() => {
 				reset()
-				router.replace('/lk')
+				router.replace('/')
 			})
 		},
 		onError(error) {
